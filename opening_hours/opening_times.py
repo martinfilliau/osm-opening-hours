@@ -1,4 +1,4 @@
-def check_time(time, value):
+def is_open(time, value):
     """
     Check if the given time is inside the given value.
     Return True if it is, else False.
