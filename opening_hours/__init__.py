@@ -5,9 +5,23 @@ DAYS_OF_THE_WEEK = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
 def is_open(day, time, value):
     if value == "24/7": return True
 
-    definitions = value.split(';')
+    opening_hours = parse_string(value)
+    
+    if not day in opening_hours: return False
+
+    for op_hours in opening_hours[day]:
+        if is_open_time(time, op_hours):
+            return True
+    return False
+
+def parse_string(value):
+    """
+    Parse a string in the OSM format
+    Returns a dict with day of the week as key and
+    a list of range of opening hours
+    """
     opening_hours = {}
-    for definition in definitions:
+    for definition in value.split(';'):
         # Mo-Fr 08:30-20:00
         d, r = definition.strip().split(' ')
         ranges = r.split(',')
@@ -27,10 +41,4 @@ def is_open(day, time, value):
                     opening_hours[d].append(ra)
                 else:
                     opening_hours[d] = [ra]
-    
-    if not day in opening_hours: return False
-
-    for op_hours in opening_hours[day]:
-        if is_open_time(time, op_hours):
-            return True
-    return False
+    return opening_hours
