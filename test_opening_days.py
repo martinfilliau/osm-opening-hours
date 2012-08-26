@@ -28,6 +28,7 @@ class TestOpeningDays(unittest.TestCase):
         value = "Mo 10:00-12:00,12:30-15:00; Tu-Fr 08:00-12:00,12:30-15:00; Sa 08:00-12:00"
         self.assertEqual(is_open("Su", "10:00", value), False)
         self.assertEqual(is_open("Mo", "10:30", value), True)
+        self.assertEqual(is_open("Mo", "12:15", value), False)
         self.assertEqual(is_open("We", "14:00", value), True)
         self.assertEqual(is_open("Sa", "14:00", value), False)
 
