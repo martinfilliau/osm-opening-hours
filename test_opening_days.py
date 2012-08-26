@@ -16,11 +16,13 @@ class TestOpeningDays(unittest.TestCase):
         self.assertEqual(is_open(day, "15:00", value), True)
         self.assertEqual(is_open(day, "18:00", value), False)
 
-    def test_parse_value(self):
+    def test_parse_multiple_days(self):
         time = "12:00"
-        day = "Mo"
         value = "Mo-Fr 08:30-20:00"
-        self.assertEqual(is_open(day, time, value), True)
+        self.assertEqual(is_open("Mo", time, value), True)
+        self.assertEqual(is_open("Tu", time, value), True)
+        self.assertEqual(is_open("Fr", time, value), True)
+        self.assertEqual(is_open("Su", time, value), False)
 
     def test_complex_value(self):
         value = "Mo 10:00-12:00,12:30-15:00; Tu-Fr 08:00-12:00,12:30-15:00; Sa 08:00-12:00"
