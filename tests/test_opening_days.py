@@ -37,5 +37,9 @@ class TestOpeningDays(unittest.TestCase):
         self.assertEqual(is_open("We", "14:00", value), True)
         self.assertEqual(is_open("Sa", "14:00", value), False)
 
+    def test_sunrise_sunset(self):
+        value = "sunrise-sunset"
+        # TODO should raise an exception: can't be processed
+
 if __name__ == "__main__":
     unittest.main()
