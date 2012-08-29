@@ -1,12 +1,14 @@
 from opening_hours.opening_times import is_open as is_open_time 
 
-DAYS_OF_THE_WEEK = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
+DAYS_OF_THE_WEEK = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
 
 def is_open(day, time, value):
     if value == "24/7": return True
 
-    opening_hours = parse_string(value)
-    
+    opening_hours = parse_string(value.lower())
+
+    day = day.lower()
+
     if not day in opening_hours: return False
 
     for op_hours in opening_hours[day]:
@@ -27,8 +29,8 @@ def parse_string(value):
         ranges = r.split(',')
         if '-' in d:
             day_from, day_to = d.split('-')
-            day_fr = DAYS_OF_THE_WEEK.index(day_from)
-            day_t = DAYS_OF_THE_WEEK.index(day_to)
+            day_fr = DAYS_OF_THE_WEEK.index(day_from.lower())
+            day_t = DAYS_OF_THE_WEEK.index(day_to.lower())
             for da in DAYS_OF_THE_WEEK[day_fr:day_t+1]:
                 for ra in ranges:
                     if da in opening_hours:
