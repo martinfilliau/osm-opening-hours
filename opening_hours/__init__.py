@@ -6,7 +6,15 @@ DAYS_OF_THE_WEEK = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
 def is_open(day, time, value):
     if value == "24/7": return True
 
-    opening_hours = parse_string(value.lower())
+    # "Cleaning"
+    value = value.lower()
+    if value.endswith(";"):
+        value = value[0:-1]
+
+    try:
+        opening_hours = parse_string(value)
+    except Exception, e:
+        raise ParseException(value, e)
 
     day = day.lower()
 
@@ -46,3 +54,10 @@ def parse_string(value):
                 else:
                     opening_hours[d] = [ra]
     return opening_hours
+
+
+class ParseException(Exception):
+
+    def __init__(self, value_to_parse, inner_message):
+        self.message = "Can't parse value: \"{0}\", {1}".format(value_to_parse.replace("\n", ""), inner_message)
+        Exception.__init__(self, self.message)
