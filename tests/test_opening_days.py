@@ -37,6 +37,14 @@ class TestOpeningDays(unittest.TestCase):
         self.assertEqual(is_open("We", "14:00", value), True)
         self.assertEqual(is_open("Sa", "14:00", value), False)
 
+    def test_complex_value_minutes(self):
+        value = "Mo 10:00-12:00,12:30-15:00; Tu-Fr 08:00-12:00,12:30-15:00; Sa 08:00-12:00"
+        self.assertEqual(is_open("Su", "10:00", value, boolean=False), 0)
+        self.assertEqual(is_open("Mo", "10:30", value, boolean=False), 90)
+        self.assertEqual(is_open("Mo", "12:15", value, boolean=False), 0)
+        self.assertEqual(is_open("We", "14:00", value, boolean=False), 60)
+        self.assertEqual(is_open("Sa", "14:00", value, boolean=False), 0)
+
     def test_sunrise_sunset(self):
         value = "sunrise-sunset"
         # TODO should raise an exception: can't be processed

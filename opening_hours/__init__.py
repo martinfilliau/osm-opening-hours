@@ -1,29 +1,37 @@
 from opening_hours.opening_times import is_open as is_open_time
+from opening_hours.opening_times import minutes_to_closing
 
 DAYS_OF_THE_WEEK = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
 
 
-def is_open(day, time, value):
+def is_open(day, time, value, boolean=True):
     if value == "24/7": return True
 
-    # "Cleaning"
-    value = value.lower()
-    if value.endswith(";"):
-        value = value[0:-1]
-
     try:
-        opening_hours = parse_string(value)
+        opening_hours = parse_string(clean_value(value))
     except Exception, e:
         raise ParseException(value, e)
 
     day = day.lower()
 
-    if not day in opening_hours: return False
+    # whether we should return a boolean closed/open
+    # or minutes before closing
+    # this is awful and should be DRYed and cleaned
+    if boolean:
+        if not day in opening_hours: return False
 
-    for op_hours in opening_hours[day]:
-        if is_open_time(time, op_hours):
-            return True
-    return False
+        for op_hours in opening_hours[day]:
+            if is_open_time(time, op_hours):
+                return True
+        return False
+    else:
+        if not day in opening_hours: return 0
+
+        for op_hours in opening_hours[day]:
+            minutes = minutes_to_closing(time, op_hours)
+            if minutes > 0:
+                return minutes
+        return 0
 
 
 def parse_string(value):
@@ -54,6 +62,13 @@ def parse_string(value):
                 else:
                     opening_hours[d] = [ra]
     return opening_hours
+
+
+def clean_value(value):
+    value = value.lower()
+    if value.endswith(";"):
+        value = value[0:-1]
+    return value
 
 
 class ParseException(Exception):
