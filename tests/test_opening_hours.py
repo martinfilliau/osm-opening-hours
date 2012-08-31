@@ -1,6 +1,6 @@
 import unittest
 
-from opening_hours.opening_times import is_open, get_minutes_from_midnight
+from opening_hours.opening_times import is_open, get_minutes_from_midnight, minutes_to_closing
 
 class TestOpeningHours(unittest.TestCase):
 
@@ -18,6 +18,21 @@ class TestOpeningHours(unittest.TestCase):
         time = "12:00"
         value = "09:00-12:00"
         self.assertEqual(is_open(time, value), True)
+
+    def test_check_minutes_inside(self):
+        time = "12:00"
+        value = "09:00-18:00"
+        self.assertEqual(minutes_to_closing(time, value), 360)
+
+    def test_check_minutes_outside(self):
+        time = "19:00"
+        value = "09:00-18:00"
+        self.assertEqual(minutes_to_closing(time, value), 0)
+
+    def test_check_minutes_boundary(self):
+        time = "12:00"
+        value = "09:00-12:00"
+        self.assertEqual(minutes_to_closing(time, value), 0)
 
     def test_minutes_from_midnight_noon(self):
         time = "12:00"
