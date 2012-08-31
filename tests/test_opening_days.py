@@ -1,6 +1,6 @@
 import unittest
 
-from opening_hours import is_open
+from opening_hours import is_open, ParseException
 
 class TestOpeningDays(unittest.TestCase):
 
@@ -47,7 +47,8 @@ class TestOpeningDays(unittest.TestCase):
 
     def test_sunrise_sunset(self):
         value = "sunrise-sunset"
-        # TODO should raise an exception: can't be processed
+        with self.assertRaises(ParseException):
+            self.assertEqual(is_open("Mo", "22:00", value), False)
 
 if __name__ == "__main__":
     unittest.main()
