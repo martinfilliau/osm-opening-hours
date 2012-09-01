@@ -4,34 +4,45 @@ from opening_hours.opening_times import minutes_to_closing
 DAYS_OF_THE_WEEK = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
 
 
-def is_open(day, time, value, boolean=True):
-    if value == "24/7": return True
+class OpeningHours(object):
 
-    try:
-        opening_hours = parse_string(clean_value(value))
-    except Exception, e:
-        raise ParseException(value, e)
+    def __init__(self, value):
+        self.value = clean_value(value)
+        self.is_always_open = False
+        if self.value == "24/7":
+            self.is_always_open = True
+            return    # can't parse this value atm
+        
+        try:
+            self.opening_hours = parse_string(self.value)
+        except Exception, e:
+            raise ParseException(value, e)
 
-    day = day.lower()
+    def is_open(self, day, time):
+        if self.is_always_open: return True
+        day = day.lower()
 
-    # whether we should return a boolean closed/open
-    # or minutes before closing
-    # this is awful and should be DRYed and cleaned
-    if boolean:
-        if not day in opening_hours: return False
+        if not day in self.opening_hours: return False
 
-        for op_hours in opening_hours[day]:
+        for op_hours in self.opening_hours[day]:
             if is_open_time(time, op_hours):
                 return True
         return False
-    else:
-        if not day in opening_hours: return 0
 
-        for op_hours in opening_hours[day]:
+    def minutes_to_closing(self, day, time):
+        if self.is_always_open: return -1   # TODO value for "not closing"?
+        day = day.lower()
+
+        if not day in self.opening_hours: return 0
+
+        for op_hours in self.opening_hours[day]:
             minutes = minutes_to_closing(time, op_hours)
             if minutes > 0:
                 return minutes
         return 0
+
+    def get_as_dictionnary(self):
+        return self.opening_hours
 
 
 def parse_string(value):

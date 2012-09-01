@@ -1,54 +1,49 @@
 import unittest
 
-from opening_hours import is_open, ParseException
+from opening_hours import OpeningHours, ParseException
 
 class TestOpeningDays(unittest.TestCase):
 
     def test_twenty_four_seven(self):
-        time = "15:00"
-        day = "Mo"
-        value = "24/7"
-        self.assertEqual(is_open(day, time, value), True)
+        oh = OpeningHours("24/7")
+        self.assertEqual(oh.is_open("Mo", "15:00"), True)
 
     def test_parse_one_day(self):
-        day = "Mo"
-        value = "Mo 10:00-16:00"
-        self.assertEqual(is_open(day, "15:00", value), True)
-        self.assertEqual(is_open(day, "18:00", value), False)
+        oh = OpeningHours("Mo 10:00-16:00")
+        self.assertEqual(oh.is_open("Mo", "15:00"), True)
+        self.assertEqual(oh.is_open("Mo", "18:00"), False)
 
     def test_we_24(self):
-        value = "Sa-Su 00:00-24:00"
-        self.assertEqual(is_open("Sa", "13:00", value), True)
-        self.assertEqual(is_open("Mo", "06:00", value), False)
+        oh = OpeningHours("Sa-Su 00:00-24:00")
+        self.assertEqual(oh.is_open("Sa", "13:00"), True)
+        self.assertEqual(oh.is_open("Mo", "06:00"), False)
 
     def test_parse_multiple_days(self):
-        time = "12:00"
-        value = "Mo-Fr 08:30-20:00"
-        self.assertEqual(is_open("Mo", time, value), True)
-        self.assertEqual(is_open("Tu", time, value), True)
-        self.assertEqual(is_open("Fr", time, value), True)
-        self.assertEqual(is_open("Su", time, value), False)
+        oh = OpeningHours("Mo-Fr 08:30-20:00")
+        self.assertEqual(oh.is_open("Mo", "12:00"), True)
+        self.assertEqual(oh.is_open("Tu", "12:00"), True)
+        self.assertEqual(oh.is_open("Fr", "12:00"), True)
+        self.assertEqual(oh.is_open("Su", "12:00"), False)
 
     def test_complex_value(self):
-        value = "Mo 10:00-12:00,12:30-15:00; Tu-Fr 08:00-12:00,12:30-15:00; Sa 08:00-12:00"
-        self.assertEqual(is_open("Su", "10:00", value), False)
-        self.assertEqual(is_open("Mo", "10:30", value), True)
-        self.assertEqual(is_open("Mo", "12:15", value), False)
-        self.assertEqual(is_open("We", "14:00", value), True)
-        self.assertEqual(is_open("Sa", "14:00", value), False)
+        oh = OpeningHours("Mo 10:00-12:00,12:30-15:00; Tu-Fr 08:00-12:00,12:30-15:00; Sa 08:00-12:00")
+        self.assertEqual(oh.is_open("Su", "10:00"), False)
+        self.assertEqual(oh.is_open("Mo", "10:30"), True)
+        self.assertEqual(oh.is_open("Mo", "12:15"), False)
+        self.assertEqual(oh.is_open("We", "14:00"), True)
+        self.assertEqual(oh.is_open("Sa", "14:00"), False)
 
     def test_complex_value_minutes(self):
-        value = "Mo 10:00-12:00,12:30-15:00; Tu-Fr 08:00-12:00,12:30-15:00; Sa 08:00-12:00"
-        self.assertEqual(is_open("Su", "10:00", value, boolean=False), 0)
-        self.assertEqual(is_open("Mo", "10:30", value, boolean=False), 90)
-        self.assertEqual(is_open("Mo", "12:15", value, boolean=False), 0)
-        self.assertEqual(is_open("We", "14:00", value, boolean=False), 60)
-        self.assertEqual(is_open("Sa", "14:00", value, boolean=False), 0)
+        oh = OpeningHours("Mo 10:00-12:00,12:30-15:00; Tu-Fr 08:00-12:00,12:30-15:00; Sa 08:00-12:00")
+        self.assertEqual(oh.minutes_to_closing("Su", "10:00"), 0)
+        self.assertEqual(oh.minutes_to_closing("Mo", "10:30"), 90)
+        self.assertEqual(oh.minutes_to_closing("Mo", "12:15"), 0)
+        self.assertEqual(oh.minutes_to_closing("We", "14:00"), 60)
+        self.assertEqual(oh.minutes_to_closing("Sa", "14:00"), 0)
 
     def test_sunrise_sunset(self):
-        value = "sunrise-sunset"
         with self.assertRaises(ParseException):
-            self.assertEqual(is_open("Mo", "22:00", value), False)
+            oh = OpeningHours("sunrise-sunset")
 
 if __name__ == "__main__":
     unittest.main()
