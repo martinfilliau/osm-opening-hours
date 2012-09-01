@@ -65,7 +65,6 @@ def parse_string(value):
     for definition in value.split(';'):
         # Mo-Fr 08:30-20:00
         d, r = definition.strip().split(' ')
-        ranges = r.split(',')
         if '-' in d:
             day_from, day_to = d.split('-')
             day_fr = DAYS_OF_THE_WEEK.index(day_from.lower())
@@ -73,14 +72,21 @@ def parse_string(value):
             # Complete the dict for days between beginning and end
             # e.g. Mo-Th --> Mo,Tu,We,Th
             for da in DAYS_OF_THE_WEEK[day_fr:day_t + 1]:
-                for ra in ranges:
-                    if ra != "off":
-                        opening_hours[da].append(process_time_range(ra))
+                opening_hours[da].extend(process_ranges(r))
         else:
-            for ra in ranges:
-                if ra != "off":
-                    opening_hours[d].append(process_time_range(ra))
+            opening_hours[d].extend(process_ranges(r))
     return opening_hours
+
+
+def process_ranges(ranges):
+    """
+    Processes a list of time ranges, returns a list of tuples
+    """
+    values = list()
+    for ra in ranges.split(','):
+        if ra != "off":
+            values.append(process_time_range(ra))
+    return values
 
 
 def process_time_range(value):
