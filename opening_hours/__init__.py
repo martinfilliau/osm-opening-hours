@@ -7,6 +7,9 @@ DAYS_OF_THE_WEEK = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
 class OpeningHours(object):
 
     def __init__(self, value):
+        """
+        @param value to parse
+        """
         self.value = clean_value(value)
         self.is_always_open = False
         if self.value == "24/7":
@@ -19,6 +22,9 @@ class OpeningHours(object):
             raise ParseException(value, e)
 
     def is_open(self, day, time):
+        """
+        Return True if open for given day and time, else False
+        """
         if self.is_always_open: return True
         day = day.lower()
 
@@ -30,6 +36,9 @@ class OpeningHours(object):
         return False
 
     def minutes_to_closing(self, day, time):
+        """
+        Return 0 if closed for given day and time, else number of minutes to closing
+        """
         if self.is_always_open: return -1   # TODO value for "not closing"?
         day = day.lower()
 
@@ -42,6 +51,9 @@ class OpeningHours(object):
         return 0
 
     def get_as_dictionnary(self):
+        """
+        Get parsed value as a dict of day containing ranges of opened times
+        """
         return self.opening_hours
 
 
