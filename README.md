@@ -1,6 +1,8 @@
 osm-opening-hours
 =================
 
+[![Build Status](https://secure.travis-ci.org/martinfilliau/osm-opening-hours.png?branch=master)](http://travis-ci.org/martinfilliau/osm-opening-hours)
+
 Contributing opening hours to OpenStreetMap
 
 Objectives:
