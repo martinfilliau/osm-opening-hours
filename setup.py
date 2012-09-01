@@ -8,7 +8,7 @@ setup(name='osm_opening_hours',
       author='Martin Filliau',
       author_email='martin@filliau.com',
       url='https://github.com/martinfilliau/osm-opening-hours',
-      py_modules=['opening_hours'],
+      py_modules=['osm_time', 'osm_time.opening_hours'],
       classifiers=[
         'Operating System :: OS Independent',
         'Programming Language :: Python',

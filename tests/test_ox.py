@@ -1,6 +1,6 @@
 import unittest
 
-from opening_hours import OpeningHours
+from osm_time.opening_hours import OpeningHours
 
 class TestOxfordshireDataset(unittest.TestCase):
 

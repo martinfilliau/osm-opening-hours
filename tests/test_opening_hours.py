@@ -1,7 +1,7 @@
 import unittest
 
-from opening_hours import OpeningHours, ParseException
-from opening_hours import get_minutes_from_midnight, clean_value, process_time_range
+from osm_time.opening_hours import OpeningHours, ParseException
+from osm_time.opening_hours import get_minutes_from_midnight, clean_value, process_time_range
 
 class TestOpeningDays(unittest.TestCase):
 
