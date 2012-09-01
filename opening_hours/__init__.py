@@ -1,6 +1,7 @@
 from collections import defaultdict
 
-DAYS_OF_THE_WEEK = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
+# Days of the week + ph (public holiday)
+DAYS_OF_THE_WEEK = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su', 'ph']
 
 
 class OpeningHours(object):
