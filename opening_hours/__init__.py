@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from opening_hours.opening_times import is_open as is_open_time
 from opening_hours.opening_times import minutes_to_closing
 
@@ -63,7 +65,7 @@ def parse_string(value):
     Returns a dict with day of the week as key and
     a list of range of opening hours
     """
-    opening_hours = {}
+    opening_hours = defaultdict(list)
     for definition in value.split(';'):
         # Mo-Fr 08:30-20:00
         d, r = definition.strip().split(' ')
@@ -74,16 +76,10 @@ def parse_string(value):
             day_t = DAYS_OF_THE_WEEK.index(day_to.lower())
             for da in DAYS_OF_THE_WEEK[day_fr:day_t + 1]:
                 for ra in ranges:
-                    if da in opening_hours:
-                        opening_hours[da].append(ra)
-                    else:
-                        opening_hours[da] = [ra]
+                    opening_hours[da].append(ra)
         else:
             for ra in ranges:
-                if d in opening_hours:
-                    opening_hours[d].append(ra)
-                else:
-                    opening_hours[d] = [ra]
+                opening_hours[d].append(ra)
     return opening_hours
 
 
