@@ -60,8 +60,8 @@ class TestOpeningDays(unittest.TestCase):
         self.assertEqual(process_time_range("0:00-23:59"), (0, 1439))
 
     def test_parse_exception(self):
-        with self.assertRaises(ParseException):
-            oh = OpeningHours("sunrise-sunset")
+        self.assertRaises(ParseException, OpeningHours, "sunrise-sunset")
+
 
 if __name__ == "__main__":
     unittest.main()
