@@ -17,7 +17,7 @@ class OpeningHours(object):
         
         try:
             self.opening_hours = parse_string(self.value)
-        except Exception, e:
+        except Exception as e:
             raise ParseException(value, e)
 
     def is_open(self, day, time):
