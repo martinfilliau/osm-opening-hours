@@ -1,8 +1,5 @@
 from collections import defaultdict
 
-from opening_hours.opening_times import is_open as is_open_time
-from opening_hours.opening_times import minutes_to_closing
-
 DAYS_OF_THE_WEEK = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
 
 
@@ -33,7 +30,7 @@ class OpeningHours(object):
         if not day in self.opening_hours: return False
 
         for op_hours in self.opening_hours[day]:
-            if is_open_time(time, op_hours):
+            if op_hours[0] < get_minutes_from_midnight(time) < op_hours[1]:
                 return True
         return False
 
@@ -47,9 +44,8 @@ class OpeningHours(object):
         if not day in self.opening_hours: return 0
 
         for op_hours in self.opening_hours[day]:
-            minutes = minutes_to_closing(time, op_hours)
-            if minutes > 0:
-                return minutes
+            if op_hours[0] < get_minutes_from_midnight(time) < op_hours[1]:
+                return op_hours[1] - get_minutes_from_midnight(time)
         return 0
 
     def get_as_dictionnary(self):
@@ -78,15 +74,38 @@ def parse_string(value):
             # e.g. Mo-Th --> Mo,Tu,We,Th
             for da in DAYS_OF_THE_WEEK[day_fr:day_t + 1]:
                 for ra in ranges:
-                    opening_hours[da].append(ra)
+                    if ra != "off":
+                        opening_hours[da].append(process_time_range(ra))
         else:
             for ra in ranges:
-                opening_hours[d].append(ra)
+                if ra != "off":
+                    opening_hours[d].append(process_time_range(ra))
     return opening_hours
 
 
+def process_time_range(value):
+    """
+    Return a tuple with (from, to) time in minutes from midnight.
+    """
+    from_time, to_time = value.split('-')
+    from_t = get_minutes_from_midnight(from_time)
+    to_t = get_minutes_from_midnight(to_time)
+    return (from_t, to_t)
+
+
+def get_minutes_from_midnight(value):
+    """
+    Return number of minutes from a hh:mm
+    """
+    hours, minutes = value.split(':')
+    return int(hours)*60 + int(minutes)
+
+
 def clean_value(value):
-    value = value.lower()
+    """
+    Attempt to clean a value (value being an opening hours string)
+    """
+    value = value.lower().strip()
     if value.endswith(";"):
         value = value[0:-1]
     return value
