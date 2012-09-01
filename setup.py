@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+from setuptools import setup 
 
 setup(name='osm_opening_hours',
       version='0.1',
@@ -8,9 +8,10 @@ setup(name='osm_opening_hours',
       author='Martin Filliau',
       author_email='martin@filliau.com',
       url='https://github.com/martinfilliau/osm-opening-hours',
-      packages=['opening_hours'],
+      py_modules=['opening_hours'],
       classifiers=[
         'Operating System :: OS Independent',
         'Programming Language :: Python',
       ],
+      test_suite = "tests",
      )
