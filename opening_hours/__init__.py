@@ -74,6 +74,8 @@ def parse_string(value):
             day_from, day_to = d.split('-')
             day_fr = DAYS_OF_THE_WEEK.index(day_from.lower())
             day_t = DAYS_OF_THE_WEEK.index(day_to.lower())
+            # Complete the dict for days between beginning and end
+            # e.g. Mo-Th --> Mo,Tu,We,Th
             for da in DAYS_OF_THE_WEEK[day_fr:day_t + 1]:
                 for ra in ranges:
                     opening_hours[da].append(ra)
