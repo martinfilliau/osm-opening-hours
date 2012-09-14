@@ -1,7 +1,6 @@
 import unittest
 
-from osm_time.opening_hours import OpeningHours, ParseException
-from osm_time.opening_hours import get_minutes_from_midnight, clean_value, process_time_range
+from osm_time.opening_hours import OpeningHours, process_time_range
 
 class TestOpeningDays(unittest.TestCase):
 
@@ -48,20 +47,9 @@ class TestOpeningDays(unittest.TestCase):
         self.assertEqual(oh.minutes_to_closing("We", "14:00"), 60)
         self.assertEqual(oh.minutes_to_closing("Sa", "14:00"), 0)
 
-    def test_get_minutes_from_midnight(self):
-        self.assertEqual(get_minutes_from_midnight("0:00"), 0)
-        self.assertEqual(get_minutes_from_midnight("02:00"), 120)
-        self.assertEqual(get_minutes_from_midnight("18:42"), 1122)
-
-    def test_clean_value(self):
-        self.assertEqual(clean_value("Mo-Fr 08:30-22:00; "), "mo-fr 08:30-22:00")
-
     def test_process_time_range(self):
         self.assertEqual(process_time_range("09:00-20:30"), (540, 1230))
         self.assertEqual(process_time_range("0:00-23:59"), (0, 1439))
-
-    def test_parse_exception(self):
-        self.assertRaises(ParseException, OpeningHours, "sunrise-sunset")
 
 
 if __name__ == "__main__":
