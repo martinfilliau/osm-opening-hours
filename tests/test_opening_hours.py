@@ -39,6 +39,16 @@ class TestOpeningDays(unittest.TestCase):
         self.assertEqual(oh.is_open("Sa", "14:00"), False)
         self.assertEqual(oh.is_open("ph", "10:00"), True)
 
+    def test_exception(self):
+        oh = OpeningHours("Mo-Fr 09:00-17:30; We 09:00-13:00; Sa 09:00-12:00")
+        self.assertEqual(oh.is_open("Mo", "14:00"), True)
+        self.assertEqual(oh.is_open("We", "12:00"), True)
+        self.assertEqual(oh.is_open("We", "14:00"), False)
+        self.assertEqual(oh.is_open("Tu", "14:00"), True)
+        self.assertEqual(oh.is_open("Sa", "11:00"), True)
+        self.assertEqual(oh.is_open("Sa", "14:00"), False)
+        self.assertEqual(oh.is_open("Su", "10:00"), False)
+
     def test_complex_value_minutes(self):
         oh = OpeningHours("Mo 10:00-12:00,12:30-15:00; Tu-Fr 08:00-12:00,12:30-15:00; Sa 08:00-12:00")
         self.assertEqual(oh.minutes_to_closing("Su", "10:00"), 0)
