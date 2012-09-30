@@ -75,9 +75,9 @@ def parse_string(value):
             # Complete the dict for days between beginning and end
             # e.g. Mo-Th --> Mo,Tu,We,Th
             for da in DAYS_OF_THE_WEEK[day_fr:day_t + 1]:
-                opening_hours[da].extend(process_ranges(r))
+                opening_hours[da] = process_ranges(r)
         else:
-            opening_hours[d].extend(process_ranges(r))
+            opening_hours[d] = process_ranges(r)
     return opening_hours
 
 
