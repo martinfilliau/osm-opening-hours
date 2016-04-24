@@ -4,6 +4,11 @@
 
 Set of classes to parse opening hours, service time and collection time from OpenStreetMap nodes.
 
+**Please note:** this script is not maintained and should not be considered as a complete parser.
+
+See [https://github.com/opening-hours/pyopening_hours](https://github.com/opening-hours/pyopening_hours)
+for a more complete implementation.
+
 ## Example
 
 Below is a simple example of using the module for opening hours, see tests for more examples.
@@ -16,7 +21,7 @@ Below is a simple example of using the module for opening hours, see tests for m
 
     print definition.minutes_to_closing("Fr", "21:30")  # get a number of minutes to the closing
 
-## More information
+## Background / long term objectives
 
 Contributing opening hours to OpenStreetMap
 
