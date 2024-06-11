@@ -1,13 +1,11 @@
-# python-osm-time-domain
-
-[![Build Status](https://secure.travis-ci.org/martinfilliau/osm-opening-hours.png?branch=master)](http://travis-ci.org/martinfilliau/osm-opening-hours)
-
-Set of classes to parse opening hours, service time and collection time from OpenStreetMap nodes.
-
-**Please note:** this script is not maintained and should not be considered as a complete parser.
+**This script is not maintained and should not be considered as a complete parser.**
 
 See [https://github.com/opening-hours/pyopening_hours](https://github.com/opening-hours/pyopening_hours)
 for a more complete implementation.
+
+## python-osm-time-domain
+
+Set of classes to parse opening hours, service time and collection time from OpenStreetMap nodes.
 
 ## Example
 
